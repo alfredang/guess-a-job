@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 720" width="680" height="720">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffc857"/>
+      <stop offset="100%" style="stop-color:#ff6b6b"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fef9f0"/>
+      <stop offset="100%" style="stop-color:#fff7eb"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+    <filter id="glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ffc857" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="680" height="720" rx="16" fill="url(#bg)"/>
+
+  <!-- Ambient glow -->
+  <ellipse cx="140" cy="80" rx="250" ry="150" fill="#ff6b6b" opacity="0.06"/>
+  <ellipse cx="540" cy="640" rx="200" ry="180" fill="#ffc857" opacity="0.05"/>
+
+  <!-- Header -->
+  <text x="340" y="52" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#b8b5c8" letter-spacing="1">🎯</text>
+  <text x="340" y="80" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="32" fill="url(#titleGrad)">Guess a Job!</text>
+
+  <!-- Stats bar -->
+  <rect x="140" y="100" width="400" height="48" rx="12" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text x="230" y="118" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#b8b5c8" letter-spacing="1.5" text-transform="uppercase">SCORE</text>
+  <text x="230" y="138" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="20" fill="#ffc857">42</text>
+  <text x="340" y="118" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#b8b5c8" letter-spacing="1.5">STREAK</text>
+  <text x="340" y="138" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="20" fill="#ffc857">3 🔥</text>
+  <text x="450" y="118" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#b8b5c8" letter-spacing="1.5">ROUND</text>
+  <text x="450" y="138" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="20" fill="#ffc857">7</text>
+
+  <!-- Progress dots -->
+  <circle cx="248" cy="176" r="12" fill="#6bcb77" fill-opacity="0.25" stroke="#6bcb77" stroke-width="2"/>
+  <rect x="262" y="175" width="24" height="2" rx="1" fill="#ffffff" fill-opacity="0.1"/>
+  <circle cx="298" cy="176" r="12" fill="#6bcb77" fill-opacity="0.25" stroke="#6bcb77" stroke-width="2"/>
+  <rect x="312" y="175" width="24" height="2" rx="1" fill="#ffffff" fill-opacity="0.1"/>
+  <circle cx="348" cy="176" r="13" fill="#ffc857" stroke="#ffc857" stroke-width="2" filter="url(#glow)"/>
+  <rect x="363" y="175" width="24" height="2" rx="1" fill="#ffffff" fill-opacity="0.1"/>
+  <circle cx="399" cy="176" r="12" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.15" stroke-width="2"/>
+  <rect x="413" y="175" width="24" height="2" rx="1" fill="#ffffff" fill-opacity="0.1"/>
+  <circle cx="449" cy="176" r="12" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.15" stroke-width="2"/>
+
+  <!-- Points badge -->
+  <rect x="290" y="198" width="56" height="26" rx="13" fill="#ffc857"/>
+  <text x="318" y="215" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="13" fill="#1a1a2e">3 pts</text>
+  <text x="360" y="215" font-family="sans-serif" font-size="11" fill="#b8b5c8">if you guess now</text>
+
+  <!-- Clue Card 1 - Revealed -->
+  <rect x="40" y="240" width="600" height="64" rx="14" fill="url(#cardGrad)" stroke="#ffc857" stroke-opacity="0.3" stroke-width="2" filter="url(#shadow)"/>
+  <text x="64" y="264" font-family="sans-serif" font-size="8" font-weight="700" fill="#ff6b6b" letter-spacing="1.5">EMOJI HINT</text>
+  <text x="64" y="286" font-family="sans-serif" font-size="22">🔥🚒🧯👨‍🚒💧</text>
+
+  <!-- Clue Card 2 - Revealed -->
+  <rect x="40" y="314" width="600" height="64" rx="14" fill="url(#cardGrad)" stroke="#ffc857" stroke-opacity="0.3" stroke-width="2" filter="url(#shadow)"/>
+  <text x="64" y="338" font-family="sans-serif" font-size="8" font-weight="700" fill="#ff6b6b" letter-spacing="1.5">WORKPLACE</text>
+  <text x="64" y="360" font-family="sans-serif" font-size="14" font-weight="500" fill="#2d2a3e">Works at a fire station</text>
+
+  <!-- Clue Card 3 - Revealed (current) -->
+  <rect x="36" y="386" width="608" height="68" rx="14" fill="url(#cardGrad)" stroke="#ffc857" stroke-opacity="0.5" stroke-width="2" filter="url(#shadow)"/>
+  <text x="64" y="412" font-family="sans-serif" font-size="8" font-weight="700" fill="#ff6b6b" letter-spacing="1.5">DAILY TASK</text>
+  <text x="64" y="434" font-family="sans-serif" font-size="14" font-weight="500" fill="#2d2a3e">Responds to emergencies and rescues people</text>
+
+  <!-- Clue Card 4 - Unrevealed -->
+  <rect x="40" y="464" width="600" height="64" rx="14" fill="#ffffff" fill-opacity="0.04" stroke="#ffffff" stroke-opacity="0.1"/>
+  <circle cx="76" cy="496" r="14" fill="#ffc857" fill-opacity="0.15"/>
+  <text x="76" y="501" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="14" fill="#ffc857">4</text>
+  <text x="104" y="501" font-family="sans-serif" font-size="13" font-weight="500" fill="#b8b5c8">Tools</text>
+
+  <!-- Clue Card 5 - Unrevealed -->
+  <rect x="40" y="538" width="600" height="64" rx="14" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.08"/>
+  <circle cx="76" cy="570" r="14" fill="#ffc857" fill-opacity="0.15"/>
+  <text x="76" y="575" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="14" fill="#ffc857">5</text>
+  <text x="104" y="575" font-family="sans-serif" font-size="13" font-weight="500" fill="#b8b5c8">Fun Fact</text>
+
+  <!-- Input area -->
+  <rect x="40" y="622" width="490" height="48" rx="14" fill="#ffffff" fill-opacity="0.07" stroke="#ffc857" stroke-width="2"/>
+  <text x="64" y="651" font-family="sans-serif" font-size="14" font-weight="500" fill="#ffffff" opacity="0.9">Firefigh...</text>
+
+  <!-- Guess button -->
+  <rect x="542" y="622" width="98" height="48" rx="14" fill="#ff6b6b" filter="url(#shadow)"/>
+  <text x="591" y="651" text-anchor="middle" font-family="sans-serif" font-weight="600" font-size="14" fill="#ffffff">Guess!</text>
+
+  <!-- Next Clue button -->
+  <rect x="250" y="682" width="180" height="36" rx="14" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1"/>
+  <text x="340" y="705" text-anchor="middle" font-family="sans-serif" font-weight="600" font-size="13" fill="#b8b5c8">Next Clue <tspan font-size="10" opacity="0.6">(-1 pt)</tspan></text>
+</svg>

@@ -2,6 +2,10 @@
 
 A fun, casual web game where you guess occupations from progressive clues. Built for leisure and passing time.
 
+**[Play Now](https://alfredang.github.io/guess-a-job/)**
+
+![Guess a Job Screenshot](screenshot.svg)
+
 ## How to Play
 
 1. Each round, a mystery job is chosen from a pool of 58 occupations
