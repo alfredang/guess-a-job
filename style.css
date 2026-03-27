@@ -1,0 +1,784 @@
+/* ============================================
+   GUESS A JOB - Retro Quiz Show Aesthetic
+   ============================================ */
+
+:root {
+  --bg-deep: #1a1a2e;
+  --bg-mid: #16213e;
+  --bg-glow: #0f3460;
+  --card-cream: #fef9f0;
+  --card-back: #fff7eb;
+  --coral: #ff6b6b;
+  --coral-dark: #e85555;
+  --amber: #ffc857;
+  --amber-dark: #e6b34e;
+  --mint: #6bcb77;
+  --mint-dark: #5ab868;
+  --lavender: #a78bfa;
+  --sky: #67d4e2;
+  --text-dark: #2d2a3e;
+  --text-mid: #6b6880;
+  --text-light: #b8b5c8;
+  --shadow-card: 0 8px 32px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.15);
+  --shadow-btn: 0 4px 16px rgba(0,0,0,0.2);
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --font-display: 'Fredoka', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deep);
+  color: var(--text-dark);
+  min-height: 100dvh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Atmospheric background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(255,107,107,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(255,200,87,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(107,203,119,0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Confetti canvas */
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* ============ LAYOUT ============ */
+
+.game-wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1rem 1rem 0.5rem;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============ HEADER ============ */
+
+.game-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.logo-icon {
+  font-size: 1.8rem;
+  animation: wobble 2s ease-in-out infinite;
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+
+.logo h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2rem;
+  background: linear-gradient(135deg, var(--amber) 0%, var(--coral) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 1.5rem;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-light);
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--amber);
+  position: relative;
+}
+
+.streak-fire {
+  font-size: 0.9rem;
+  position: absolute;
+  top: -4px;
+  right: -18px;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.streak-fire.visible {
+  opacity: 1;
+  animation: fireFlicker 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes fireFlicker {
+  from { transform: scale(1) rotate(-5deg); }
+  to { transform: scale(1.15) rotate(5deg); }
+}
+
+/* ============ CLUE PROGRESS ============ */
+
+.clue-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 0.6rem;
+}
+
+.progress-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-light);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.progress-dot.active {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--text-dark);
+  transform: scale(1.15);
+  box-shadow: 0 0 16px rgba(255,200,87,0.4);
+}
+
+.progress-dot.revealed {
+  background: rgba(107,203,119,0.25);
+  border-color: var(--mint);
+  color: var(--mint);
+}
+
+.progress-connector {
+  width: 24px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 1px;
+}
+
+/* ============ POINTS INDICATOR ============ */
+
+.points-indicator {
+  text-align: center;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.points-badge {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--bg-deep);
+  background: var(--amber);
+  padding: 0.2rem 0.75rem;
+  border-radius: 20px;
+  display: inline-block;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.points-label {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+/* ============ CLUE CARDS ============ */
+
+.clue-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+  perspective: 1200px;
+}
+
+.clue-card {
+  height: 68px;
+  cursor: default;
+  opacity: 0.35;
+  transform: scale(0.97);
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+.clue-card.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.clue-card.current {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.clue-card.flipped .card-inner {
+  transform: rotateX(180deg);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  padding: 0 1.2rem;
+  gap: 0.8rem;
+}
+
+.card-front {
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+}
+
+.card-back {
+  background: var(--card-cream);
+  border: 2px solid rgba(255,200,87,0.3);
+  transform: rotateX(180deg);
+  box-shadow: var(--shadow-card);
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0.6rem 1.2rem;
+  gap: 0.15rem;
+}
+
+.card-number {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--amber);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,200,87,0.15);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.card-category {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--text-light);
+}
+
+.card-category-small {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--coral);
+}
+
+.card-clue {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  line-height: 1.3;
+}
+
+/* Emoji clue gets bigger text */
+.clue-card[data-index="0"] .card-clue {
+  font-size: 1.6rem;
+}
+
+/* ============ INPUT AREA ============ */
+
+.game-area {
+  flex: 1;
+}
+
+.input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+}
+
+#guess-input {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius-md);
+  border: 2px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.07);
+  color: #fff;
+  outline: none;
+  transition: all 0.3s;
+  backdrop-filter: blur(8px);
+}
+
+#guess-input::placeholder {
+  color: var(--text-light);
+  font-weight: 400;
+}
+
+#guess-input:focus {
+  border-color: var(--amber);
+  background: rgba(255,255,255,0.1);
+  box-shadow: 0 0 20px rgba(255,200,87,0.15);
+}
+
+/* ============ AUTOCOMPLETE ============ */
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 70px;
+  background: var(--card-cream);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+  margin-top: 4px;
+}
+
+.autocomplete-dropdown.open {
+  display: block;
+  animation: dropIn 0.2s ease-out;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.autocomplete-item {
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: background 0.15s;
+  font-weight: 500;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.highlighted {
+  background: rgba(255,200,87,0.2);
+}
+
+.autocomplete-item + .autocomplete-item {
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+/* ============ BUTTONS ============ */
+
+.btn {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-guess {
+  padding: 0.85rem 1.4rem;
+  background: var(--coral);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255,107,107,0.35);
+  flex-shrink: 0;
+}
+
+.btn-guess:hover {
+  background: var(--coral-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(255,107,107,0.4);
+}
+
+.btn-guess:active {
+  transform: translateY(0);
+}
+
+.btn-skip {
+  padding: 0.6rem 1.2rem;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-light);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+}
+
+.btn-skip:hover {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.skip-cost {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.btn-next {
+  padding: 0.85rem 2rem;
+  background: var(--amber);
+  color: var(--text-dark);
+  box-shadow: var(--shadow-btn);
+  font-size: 1.05rem;
+}
+
+.btn-next:hover {
+  background: var(--amber-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255,200,87,0.35);
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-light);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-family: var(--font-display);
+}
+
+.btn-icon:hover {
+  background: rgba(255,255,255,0.12);
+  color: white;
+}
+
+/* ============ RESULT OVERLAY ============ */
+
+.result-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26,26,46,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 500;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.result-card {
+  background: var(--card-cream);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.85) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.result-emoji {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.result-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.result-title.correct {
+  color: var(--mint-dark);
+}
+
+.result-title.wrong {
+  color: var(--coral);
+}
+
+.result-answer {
+  font-size: 1rem;
+  color: var(--text-mid);
+  margin-bottom: 0.3rem;
+}
+
+.result-answer strong {
+  color: var(--text-dark);
+}
+
+.result-points {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--amber-dark);
+  margin-bottom: 1.2rem;
+}
+
+/* ============ FOOTER ============ */
+
+.game-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 0;
+  margin-top: auto;
+}
+
+.footer-text {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  opacity: 0.6;
+}
+
+/* ============ HOW TO PLAY MODAL ============ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26,26,46,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 600;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-card {
+  background: var(--card-cream);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+
+.how-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.how-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.how-num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: white;
+  background: var(--coral);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.how-step p {
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+
+/* ============ UTILITIES ============ */
+
+.hidden {
+  display: none !important;
+}
+
+/* Score pop animation */
+.score-pop {
+  animation: scorePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scorePop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* Shake animation for wrong guess */
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 500px) {
+  .logo h1 {
+    font-size: 1.6rem;
+  }
+
+  .stats-bar {
+    padding: 0.5rem 1rem;
+    gap: 1rem;
+  }
+
+  .stat-value {
+    font-size: 1.2rem;
+  }
+
+  .clue-card {
+    height: 62px;
+  }
+
+  .card-clue {
+    font-size: 0.9rem;
+  }
+
+  .clue-card[data-index="0"] .card-clue {
+    font-size: 1.4rem;
+  }
+
+  .result-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .progress-dot {
+    width: 24px;
+    height: 24px;
+    font-size: 0.6rem;
+  }
+
+  .progress-connector {
+    width: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .game-wrapper {
+    padding: 0.5rem 0.5rem 0.25rem;
+  }
+
+  .logo h1 {
+    font-size: 1.35rem;
+  }
+
+  .clue-card {
+    height: 58px;
+  }
+}
